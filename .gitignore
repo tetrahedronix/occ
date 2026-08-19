@@ -1,0 +1,59 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+# !*.*
+# Unignore all with extensions
+!*.tex
+!*.pdf
+!*.md
+!*.go
+!*.cpp
+!*.h
+!*.png
+!*.jpg
+!*.lean
+!*.mojo
+!*.toml
+!*.txt
+!*.py
+!*.js
+!*.html
+!*.org
+!Makefile
+
+# Unignore Go file
+!go.mod
+!go.sum
+
+# Unignore Dockerfile e script di avvio
+!Dockerfile
+!*.sh
+
+# Unignore all dirs
+!*/
+
+# Ignore .backups directory
+.backups
+*/**/.backups
+
+!*_*.org
+!*.jsonl
+!*.json
+
+!.gitignore
+*/**/scripts
+
+.llemma_env
+
+.opencode
+.specify
+.cache
+.gemini
+.npm
+.bun
+.local
+.config
+.vscode
+opencode.json
+global.json
