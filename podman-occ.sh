@@ -2,6 +2,7 @@
 
 WORKDIR="$(cd "$(dirname "$0")" && pwd)"
 
+mkdir -p "$HOME/.opencode-home"
 
 cd "$WORKDIR" || exit 1
 
@@ -15,7 +16,7 @@ fi
 podman run --rm -it \
   --userns=keep-id \
   --network=slirp4netns \
-  --tmpfs /home/opencode:rw,exec,nosuid,nodev,mode=1777 \
+  -v "$HOME/.opencode-home":/home/opencode:Z \
   -e HOME=/home/opencode \
   -e GIT_CONFIG_GLOBAL=/tmp/.gitconfig \
   -v "$(pwd)":/workspace:Z \
