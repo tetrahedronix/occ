@@ -1,0 +1,85 @@
+#+TITLE: occ - Development Roadmap
+#+AUTHOR: Giulio Carlo
+#+OPTIONS: toc:2
+
+* Project Overview
+  =occ= generates reproducible container sandboxes for AI coding agents based on a declarative =sandbox.yml=.
+  Produces a ready-to-use =Dockerfile= and a standalone shell launcher without runtime dependencies on =occ=.
+
+* Technical Architecture
+  - *Language:* Go
+  - *YAML Parser:* =gopkg.in/yaml.v3=
+  - *Templating Engine:* Go standard library =text/template=
+  - *Embedded Templates:* Go =embed= package for default templates
+  - *Container Runtime:* declared per-project in =sandbox.yml= (=podman= or =docker=); templates branch on this field rather than assuming one engine
+  - *Package Manager Mapping:* distro selection drives package-manager syntax (=apt-get=, =apk=, ...) inside the templates; distro support is scoped explicitly, not implied by the base-image name alone
+  - *Provenance:* every generated file carries a header comment with the =occ= version and a hash of the source =sandbox.yml=, to detect stale/hand-edited output later
+
+* TODOs [0/6]
+** TODO Phase 1: Project Setup & Data Structures                       :setup:
+*** TODO Initialize Go module (=go mod init=)
+*** TODO Define Go structs matching =sandbox.yml= schema
+    - Distro / Base image specifications
+    - System packages list
+    - Runtime options & flags
+    - Container runtime field (=podman= / =docker=), with engine-specific sub-options (e.g. =userns=keep-id=, =network=slirp4netns= only meaningful for Podman)
+    - Output script name (user-chosen launcher filename)
+*** TODO Define distro → package-manager mapping table
+    - Explicit list of supported distros (e.g. Debian/Ubuntu only, or + Alpine)
+    - Package-manager install syntax per distro, used by conditional blocks in =Dockerfile.tmpl=
+    - Decide and document scope: unsupported distro should fail validation, not silently emit a broken Dockerfile
+*** TODO Add dependency =gopkg.in/yaml.v3=
+
+** TODO Phase 2: Template Design & Embedding                       :template:
+*** TODO Draft default =Dockerfile.tmpl=
+    - Base OS selection
+    - Package manager invocation, branched per distro (apt, apk, etc.)
+    - Environment setup & user configuration
+    - Provenance header comment (version + config hash)
+*** TODO Draft default =sandbox-occ.tmpl= (shell launcher wrapper)
+    - Handle enabled flags dynamically
+    - Set up volume mounts and container run options
+    - Branch runtime-specific flags on the =runtime= field (Podman vs Docker options are not interchangeable)
+    - Keep runtime-evaluated shell variables (=$SSH_AUTH_SOCK=, =$(pwd)=, =$HOME=) untouched by template substitution — only generation-time values go through =text/template=
+    - Provenance header comment (version + config hash)
+*** TODO Embed default templates into the binary using =embed.FS=
+*** TODO Define template lookup/override convention
+    - Search order for user-provided =Dockerfile.tmpl= / =sandbox-occ.tmpl= (e.g. project root vs =.occ/templates/=)
+    - Confirm fallback to embedded default is per-file, not all-or-nothing (a custom =Dockerfile.tmpl= shouldn't force a custom =sandbox-occ.tmpl= too)
+
+** TODO Phase 3: Core Logic & Generators                               :core:
+*** TODO Implement YAML parser module
+    - Fallback handling if =sandbox.yml= is missing or invalid
+    - Schema validation: required fields present, enum values (=distro=, =runtime=) within supported set
+    - Fail fast with a clear error message on invalid config, before touching templates
+*** TODO Implement Dockerfile generator
+    - Load user-provided template or fallback to embedded default (per template-lookup convention above)
+    - Execute =text/template= rendering with parsed struct
+    - Guard against silent =<no value>= output on missing struct fields (strict mode / field-existence check before render)
+    - Write output to =Dockerfile=
+*** TODO Implement Shell Launcher generator
+    - Render =sandbox-occ.tmpl= with parsed options
+    - Write output to user-chosen =script_name.sh=
+    - Make the launcher script executable (=chmod +x= / mode =0755= on write)
+*** TODO Implement overwrite policy for generated files
+    - Default: refuse to overwrite an existing =Dockerfile= / launcher without confirmation
+    - =--force= flag to overwrite unconditionally
+    - Optional =--diff= to preview changes before overwriting
+
+** TODO Phase 4: CLI Interface & UX                                      :cli:
+*** TODO Build CLI entrypoint (=main.go=)
+    - Subcommand =occ init=: scaffold a starter =sandbox.yml= in the current project
+    - Subcommand =occ generate=: read existing =sandbox.yml= and produce =Dockerfile= + launcher
+    - Flags for custom YAML config path, output directory, and custom templates
+    - =--force= / =--diff= flags (see overwrite policy above)
+*** TODO Add logging and user feedback (clear success/error messages)
+
+** TODO Phase 5: Testing & Validation                                :testing:
+*** TODO Write unit tests for YAML parsing and template rendering
+    - Valid config cases per supported distro/runtime combination
+    - Invalid config cases (missing required field, unsupported distro/runtime value)
+*** TODO Write unit tests for overwrite policy (default refusal, =--force=, =--diff=)
+*** TODO Test generated =Dockerfile= with =docker build= and =podman build=
+*** TODO Test generated shell launcher execution
+    - Verify runtime-specific flags appear only for the declared engine (Podman flags absent when =runtime: docker=, and vice versa)
+    - Verify shell-evaluated variables (=$SSH_AUTH_SOCK= etc.) survive generation unresolved
