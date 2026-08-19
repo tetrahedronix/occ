@@ -1,7 +1,7 @@
 #!/bin/sh
 
 WORKDIR="$(cd "$(dirname "$0")" && pwd)"
-USER="$(whoami)"
+
 
 cd "$WORKDIR" || exit 1
 
@@ -15,19 +15,11 @@ fi
 podman run --rm -it \
   --userns=keep-id \
   --network=slirp4netns \
+  --tmpfs /home/opencode:rw,exec,nosuid,nodev,mode=1777 \
+  -e HOME=/home/opencode \
+  -e GIT_CONFIG_GLOBAL=/tmp/.gitconfig \
   -v "$(pwd)":/workspace:Z \
   -v "$SSH_AUTH_SOCK":/ssh-agent:Z \
   -e SSH_AUTH_SOCK=/ssh-agent \
-  -v "$HOME/.gitconfig":/$USER/.gitconfig:ro,Z \
+  -v "$HOME/.gitconfig":/tmp/.gitconfig:ro,Z \
   ai-occ "$CMD"
-
-# podman run --rm -it \
-#   --userns=keep-id \
-#   --network=slirp4netns \
-#   --tmpfs /home/opencode:rw,exec,uid=$(id -u),gid=$(id -g),mode=700 \
-#   -e HOME=/home/opencode \
-#   -v "$(pwd)":/workspace:Z \
-#   -v "$SSH_AUTH_SOCK":/ssh-agent:Z \
-#   -e SSH_AUTH_SOCK=/ssh-agent \
-#   -v "$HOME/.gitconfig":/home/opencode/.gitconfig:ro,Z \
-#   ai-occ "$CMD"

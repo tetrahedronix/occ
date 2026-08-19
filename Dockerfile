@@ -21,4 +21,3 @@ ENV PATH="/usr/local/nvm-default/bin:${PATH}"
 RUN . "$NVM_DIR/nvm.sh" && npm install -g --allow-scripts=opencode-ai opencode-ai 
 
 WORKDIR /workspace
-ENTRYPOINT ["opencode"]
