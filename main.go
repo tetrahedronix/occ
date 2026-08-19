@@ -12,11 +12,11 @@ func main() {
 	rootCmd := &cobra.Command{
 		Use:   "occ",
 		Short: "Opencode Configure for containerized sandboxes",
-		Long:  "occ generates reproducible Docker/Podman sandboxes for AI coding agents from a declarative sandbox.yml",
+		Long:  "occ generates reproducible Docker/Podman containers for AI coding agents from a declarative container.yml",
 	}
 	initCmd := &cobra.Command{
 		Use:   "init [docker|podman]",
-		Short: "Initialize",
+		Short: "Scaffold a starter container.yml in the current project",
 		// ExactArgs(1) garantisce che l'utente passi esattamente un argomento dopo init
 		Args: cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
