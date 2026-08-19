@@ -17,7 +17,7 @@ Two things live in one repo (`git@github.com:tetrahedronix/occ.git`, branch `mai
 
 It ignores `*` and unignores only listed extensions. Consequences for new work:
 
-- `*.yml`, `*.yaml`, and `*.tmpl` are **not** unignored — the planned `orchestrator.yml` and `Dockerfile.tmpl`/`orchestrator-occ.tmpl` will be silently untracked unless you extend `.gitignore` first.
+- `*.yml`, `*.yaml`, and `*.tmpl` **are** unignored, so `orchestrator.yml` and `Dockerfile.tmpl`/`orchestrator-occ.tmpl` are tracked.
 - `*.go`, `go.mod`, `go.sum`, `Dockerfile`, `*.sh`, `*.org`, `*.md`, `*.json` are tracked.
 
 ## Conventions to honor from `TODO.org`
