@@ -26,6 +26,11 @@
 !go.mod
 !go.sum
 
+# Unignore occ templates and YAML configs/fixtures
+!*.tmpl
+!*.yml
+!*.yaml
+
 # Unignore Dockerfile e script di avvio
 !Dockerfile
 !*.sh
@@ -55,5 +60,6 @@
 .local
 .config
 .vscode
+.ssh
 opencode.json
 global.json
