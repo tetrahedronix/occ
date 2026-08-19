@@ -37,9 +37,9 @@ func main() {
 }
 
 func runInit(cmd *cobra.Command, args []string) error {
+	var runtime string
 	// args[0] conterrà "docker" oppure "podman"
 	target := args[0]
-	runtime := "podman"
 
 	switch target {
 	case "docker":
