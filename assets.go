@@ -12,17 +12,24 @@ import (
 //go:embed internal/templates/orchestrator-occ.tmpl
 var templateFS embed.FS
 
+type ScriptOptions struct {
+	SSH     bool `yaml:"ssh"`
+	GitHub  bool `yaml:"github"`
+	Reset   bool `yaml:"reset"`
+	NoCache bool `yaml:"no-cache"`
+}
+
 type Config struct {
-	Distro        string   `yaml:"distro"`
-	DistroVersion string   `yaml:"distro_version"`
-	Runtime       string   `yaml:"runtime"`
-	ScriptName    string   `yaml:"script_name"`
-	Packages      []string `yaml:"packages"`
-	NodeVersion   string   `yaml:"node_version"`
-	Python        bool     `yaml:"python"`
-	GoVersion     string   `yaml:"go_version"`
-	Opencode      bool     `yaml:"opencode"`
-	ScriptOptions []string `yaml:"script_options"`
+	Distro        string        `yaml:"distro"`
+	DistroVersion string        `yaml:"distro_version"`
+	Runtime       string        `yaml:"runtime"`
+	ScriptName    string        `yaml:"script_name"`
+	Packages      []string      `yaml:"packages"`
+	NodeVersion   string        `yaml:"node_version"`
+	Python        bool          `yaml:"python"`
+	GoVersion     string        `yaml:"go_version"`
+	Opencode      bool          `yaml:"opencode"`
+	ScriptOptions ScriptOptions `yaml:"script_options"`
 }
 
 func newConfig(runtime string) (Config, error) {
@@ -37,10 +44,30 @@ func newConfig(runtime string) (Config, error) {
 		Python:        false,
 		GoVersion:     "1.26.6",
 		Opencode:      true,
-		ScriptOptions: []string{"ssh", "github", "reset", "no-cache"},
+		ScriptOptions: ScriptOptions{
+			SSH:     false,
+			GitHub:  false,
+			Reset:   false,
+			NoCache: false,
+		},
 	}
 
 	return defaultConfig, nil
+}
+
+func (c Config) HasScriptOption(option string) bool {
+	switch option {
+	case "ssh":
+		return c.ScriptOptions.SSH
+	case "github":
+		return c.ScriptOptions.GitHub
+	case "reset":
+		return c.ScriptOptions.Reset
+	case "no-cache":
+		return c.ScriptOptions.NoCache
+	default:
+		return false
+	}
 }
 
 func newConfigFile(cfg Config, force bool) error {
