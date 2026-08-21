@@ -2,7 +2,11 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"log"
+	"os"
+
+	yaml "gopkg.in/yaml.v3"
 )
 
 //go:embed internal/templates/Dockerfile.tmpl
@@ -41,6 +45,23 @@ func newConfig(runtime string) (Config, error) {
 }
 
 func newConfigFile(cfg Config, force bool) error {
+
+	data, err := yaml.Marshal(&cfg)
+
+	if err != nil {
+		return fmt.Errorf("errore durante la serializzazione YAML: %w", err)
+	}
+
+	filename := cfg.Runtime + "-occ.yml"
+
+	// Scrivi direttamente
+	if force {
+		return os.WriteFile(filename, data, 0644)
+	}
+
+	if _, err := os.Stat(filename); err == nil {
+		return fmt.Errorf("il file %s esiste già. Usa --force per sovrascrivere", filename)
+	}
 
 	// TODO: implementare la scrittura di orchestrator.yml
 	// (creazione o sovrascrittura in base alla flag force)
