@@ -16,7 +16,7 @@ func TestNewConfig(t *testing.T) {
 	base := Config{
 		Distro:        "debian",
 		DistroVersion: "13.6",
-		Packages:      []string{"golang", "curl", "ca-certificates", "git"},
+		Packages:      []string{"golang", "curl", "ca-certificates", "git", "gh"},
 		NodeVersion:   "22",
 		GoVersion:     "1.26.6",
 		Opencode:      true,

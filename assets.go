@@ -48,7 +48,7 @@ func newConfigFile(cfg Config, force bool) error {
 	data, err := yaml.Marshal(&cfg)
 
 	if err != nil {
-		return fmt.Errorf("errore durante la serializzazione YAML: %w", err)
+		return fmt.Errorf("error during YAML serialization: %w", err)
 	}
 
 	filename := cfg.Runtime + "-occ.yml"
@@ -59,7 +59,7 @@ func newConfigFile(cfg Config, force bool) error {
 	}
 
 	if _, err := os.Stat(filename); err == nil {
-		return fmt.Errorf("il file %s esiste già. Usa --force per sovrascrivere", filename)
+		return fmt.Errorf("the file %s already exists. Use --force to overwrite", filename)
 	}
 
 	return os.WriteFile(filename, data, 0644)

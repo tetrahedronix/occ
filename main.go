@@ -26,7 +26,7 @@ func main() {
 	// "force" è il nome lungo (--force)
 	// "f" è lo short (-f)
 	// false è il valore di default
-	initCmd.Flags().BoolP("force", "f", false, "Forza la sovrascrittura del file esistente")
+	initCmd.Flags().BoolP("force", "f", false, "Overwrite existing file")
 
 	rootCmd.AddCommand(initCmd)
 
@@ -47,7 +47,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	case "podman":
 		runtime = "podman"
 	default:
-		return fmt.Errorf("runtime non supportato: %s. Usa 'docker' o 'podman'.", target)
+		return fmt.Errorf("runtime not supported: %s. Use 'docker' or 'podman'.", target)
 	}
 
 	// Invoca NewConfig per popolare la struttura
@@ -69,7 +69,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	}
 
 	// Messaggio di successo finale (mostrato solo se tutto è andato a buon fine)
-	log.Printf("Configurazione per %s inizializzata con successo.\n", runtime)
+	log.Printf("Configuration for %s initialized successfully.\n", runtime)
 
 	return nil
 }
