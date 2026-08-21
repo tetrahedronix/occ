@@ -15,20 +15,20 @@
   - *Package Manager Mapping:* distro selection drives package-manager syntax (=apt-get=, =apk=, ...) inside the templates; distro support is scoped explicitly, not implied by the base-image name alone
   - *Provenance:* every generated file carries a header comment with the =occ= version and a hash of the source =orchestrator.yml=, to detect stale/hand-edited output later
 
-* TODOs [0/6]
+* TODOs [1/6]
 ** TODO Phase 1: Project Setup & Data Structures                       :setup:
-*** TODO Initialize Go module (=go mod init=)
-*** TODO Define Go structs matching =orchestrator.yml= schema
-    - Distro / Base image specifications
-    - System packages list
-    - Runtime options & flags
+*** DONE Initialize Go module (=go mod init=)
+*** DONE Define Go structs matching =orchestrator.yml= schema
+    - DONE Distro / Base image specifications
+    - DONE System packages list
+    - DONE Runtime options & flags
     - Container runtime field (=podman= / =docker=), with engine-specific sub-options (e.g. =userns=keep-id=, =network=slirp4netns= only meaningful for Podman)
     - Output script name (user-chosen launcher filename)
 *** TODO Define distro → package-manager mapping table
     - Explicit list of supported distros (e.g. Debian/Ubuntu only, or + Alpine)
     - Package-manager install syntax per distro, used by conditional blocks in =Dockerfile.tmpl=
     - Decide and document scope: unsupported distro should fail validation, not silently emit a broken Dockerfile
-*** TODO Add dependency =gopkg.in/yaml.v3=
+*** DONE Add dependency =gopkg.in/yaml.v3=
 
 ** TODO Phase 2: Template Design & Embedding                       :template:
 *** TODO Draft default =Dockerfile.tmpl=
