@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"fmt"
-	"log"
 	"os"
 
 	yaml "gopkg.in/yaml.v3"
@@ -63,9 +62,5 @@ func newConfigFile(cfg Config, force bool) error {
 		return fmt.Errorf("il file %s esiste già. Usa --force per sovrascrivere", filename)
 	}
 
-	// TODO: implementare la scrittura di orchestrator.yml
-	// (creazione o sovrascrittura in base alla flag force)
-	log.Printf("Stub: creazione di orchestrator.yml per runtime %s (force=%v)", cfg.Runtime, force)
-
-	return nil
+	return os.WriteFile(filename, data, 0644)
 }

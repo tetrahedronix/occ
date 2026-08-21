@@ -1,65 +1,71 @@
-# Ignore all
-*
+```
+# Build artifacts
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.exe
+*.out
 
-# Unignore all with extensions
-# !*.*
-# Unignore all with extensions
-!*.tex
-!*.pdf
-!*.md
-!*.go
-!*.cpp
-!*.h
-!*.png
-!*.jpg
-!*.lean
-!*.mojo
-!*.toml
-!*.txt
-!*.py
-!*.js
-!*.html
-!*.org
-!Makefile
+# Go-specific
+*.test
+*.prof
+cover.out
+go.sum
 
-# Unignore Go file
-!go.mod
-!go.sum
+# Dependencies
+vendor/
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.egg-info/
 
-# Unignore occ templates and YAML configs/fixtures
-!*.tmpl
-!*.yml
-!*.yaml
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Unignore Dockerfile e script di avvio
-!Dockerfile
-!*.sh
+# Logs
+*.log
 
-# Unignore all dirs
-!*/
+# Environment
+.env
+.env.local
+*.env.*
 
-# Ignore .backups directory
-.backups
-*/**/.backups
+# Coverage
+coverage/
+htmlcov/
+.coverage
 
-!*_*.org
-!*.jsonl
-!*.json
+# OS
+.DS_Store
+Thumbs.db
 
-!.gitignore
-*/**/scripts
-
-.llemma_env
-
-.opencode
-.specify
-.cache
-.gemini
-.npm
-.bun
-.local
-.config
-.vscode
-.ssh
-opencode.json
-global.json
+# Compressed
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+```
