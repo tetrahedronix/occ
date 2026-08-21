@@ -15,7 +15,7 @@
   - *Package Manager Mapping:* distro selection drives package-manager syntax (=apt-get=, =apk=, ...) inside the templates; distro support is scoped explicitly, not implied by the base-image name alone
   - *Provenance:* every generated file carries a header comment with the =occ= version and a hash of the source =orchestrator.yml=, to detect stale/hand-edited output later
 
-* TODOs [1/6]
+* TODOs [1/7]
 ** TODO Phase 1: Project Setup & Data Structures                       :setup:
 *** DONE Initialize Go module (=go mod init=)
 *** DONE Define Go structs matching =orchestrator.yml= schema
@@ -83,3 +83,22 @@
 *** TODO Test generated shell launcher execution
     - Verify runtime-specific flags appear only for the declared engine (Podman flags absent when =runtime: docker=, and vice versa)
     - Verify shell-evaluated variables (=$SSH_AUTH_SOCK= etc.) survive generation unresolved
+
+** TODO Phase 6: OpenCode Local LLM Configuration                     :llm:
+*** TODO Define OpenCode local LLM schema extension for =orchestrator.yml=
+    - Add `opencode` section with `model`, `temperature`, `system_prompt` fields
+    - Validation: supported model list, temperature range, system_prompt length
+    - Fail fast with clear error on invalid configuration
+*** TODO Implement template modifications for LLM-aware generation
+    - Option A: Extend =Dockerfile.tmpl= with `{{.Opencode}}` block for local model setup
+    - Option B: Modify =orchestrator-occ.tmpl= to inject LLM configuration into shell environment
+    - Option C: Generate separate artifact (e.g. =opencode-config.json=) referenced by launcher
+*** TODO Add validation and acceptance criteria
+    - Supported models: list of compatible local LLM models
+    - Temperature: valid range (0.0 to 1.0)
+    - System prompt: maximum character limit
+    - Template rendering guard: strict mode for missing opencode fields
+*** TODO Create issue template and documentation
+    - =feature-opencode-local-llm.md= template for tracking configuration requests
+    - Update =.gitignore= to standardize file exclusion patterns
+    - Document workflow: from manual =opencode.json= injection to declarative template-based generation
