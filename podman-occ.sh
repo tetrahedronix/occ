@@ -17,6 +17,7 @@ podman run --rm -it \
   --userns=keep-id \
   --network=slirp4netns \
   -v "$HOME/.opencode-home":/home/opencode:Z \
+  -e GH_TOKEN="$GH_TOKEN" \
   -e HOME=/home/opencode \
   -e GIT_CONFIG_GLOBAL=/tmp/.gitconfig \
   -v "$(pwd)":/workspace:Z \
