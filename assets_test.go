@@ -8,19 +8,15 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
-// TestNewConfig verifies that newConfig() returns the expected default Config
-// for each supported runtime. It builds the base default configuration, then
-// for every runtime in the cases table it checks that the returned Config
-// matches the base one with only Runtime and ScriptName overridden.
 func TestNewConfig(t *testing.T) {
 	base := Config{
 		Distro:        "debian",
 		DistroVersion: "13.6",
 		Packages:      []string{"golang", "curl", "ca-certificates", "git", "gh"},
 		NodeVersion:   "22",
+		Python:        false,
 		GoVersion:     "1.26.6",
 		Opencode:      true,
-		ScriptOptions: []string{"ssh", "github", "reset", "no-cache"},
 	}
 
 	cases := []struct {
@@ -31,34 +27,23 @@ func TestNewConfig(t *testing.T) {
 		{"podman", Config{Runtime: "podman", ScriptName: "podman-occ.sh"}},
 	}
 
-	// For each test case, calls newConfig() with the runtime under test and
-	// compares the result against the expected base configuration.
 	for _, tc := range cases {
-		// Calls newConfig() with the current runtime.
 		got, err := newConfig(tc.runtime)
-		// If newConfig() returns an error, the test fails immediately.
 		if err != nil {
 			t.Fatalf("newConfig(%q): unexpected error: %v", tc.runtime, err)
 		}
 
-		// Overrides Runtime and ScriptName in the base configuration with the
-		// expected values for this runtime, so it can be compared with got.
-		base.Runtime = tc.runtime
-		base.ScriptName = tc.want.ScriptName
+		// Initialize want from base, overriding only Runtime and ScriptName
+		want := base
+		want.Runtime = tc.want.Runtime
+		want.ScriptName = tc.want.ScriptName
 
-		// Compares the returned Config with the expected one field by field.
-		if !reflect.DeepEqual(got, base) {
-			t.Errorf("newConfig(%q) = %+v, want %+v", tc.runtime, got, base)
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("newConfig(%q) = %+v, want %+v", tc.runtime, got, want)
 		}
 	}
 }
 
-// TestNewConfigFile tests the newConfigFile function which creates a YAML
-// configuration file from a Config struct. It verifies:
-// - File creation when force is true
-// - File creation when force is false and file doesn't exist
-// - Error when force is false and file already exists
-// - Correct YAML content in the created file
 func TestNewConfigFile(t *testing.T) {
 	testDir := t.TempDir()
 	originalWd, err := os.Getwd()
@@ -82,7 +67,12 @@ func TestNewConfigFile(t *testing.T) {
 		Python:        false,
 		GoVersion:     "1.26.6",
 		Opencode:      true,
-		ScriptOptions: []string{"ssh", "github"},
+		ScriptOptions: ScriptOptions{
+			SSH:     true,
+			GitHub:  false,
+			Reset:   true,
+			NoCache: false,
+		},
 	}
 
 	expectedFilename := "docker-occ.yml"
@@ -121,6 +111,7 @@ func TestNewConfigFile(t *testing.T) {
 	t.Run("FileExistsWithForce", func(t *testing.T) {
 		modifiedCfg := cfg
 		modifiedCfg.Distro = "ubuntu"
+		modifiedCfg.ScriptName = "ubuntu-occ.sh"
 
 		err := newConfigFile(modifiedCfg, true)
 		if err != nil {
@@ -140,6 +131,9 @@ func TestNewConfigFile(t *testing.T) {
 
 		if readCfg.Distro != "ubuntu" {
 			t.Errorf("Expected distro to be 'ubuntu', got '%s'", readCfg.Distro)
+		}
+		if readCfg.ScriptName != "ubuntu-occ.sh" {
+			t.Errorf("Expected script_name to be 'ubuntu-occ.sh', got '%s'", readCfg.ScriptName)
 		}
 	})
 }

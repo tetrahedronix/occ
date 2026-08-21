@@ -55,21 +55,6 @@ func newConfig(runtime string) (Config, error) {
 	return defaultConfig, nil
 }
 
-func (c Config) HasScriptOption(option string) bool {
-	switch option {
-	case "ssh":
-		return c.ScriptOptions.SSH
-	case "github":
-		return c.ScriptOptions.GitHub
-	case "reset":
-		return c.ScriptOptions.Reset
-	case "no-cache":
-		return c.ScriptOptions.NoCache
-	default:
-		return false
-	}
-}
-
 func newConfigFile(cfg Config, force bool) error {
 
 	data, err := yaml.Marshal(&cfg)
