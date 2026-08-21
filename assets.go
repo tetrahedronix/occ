@@ -32,7 +32,7 @@ func newConfig(runtime string) (Config, error) {
 		DistroVersion: "13.6",
 		Runtime:       runtime,
 		ScriptName:    runtime + "-occ.sh",
-		Packages:      []string{"golang", "curl", "ca-certificates", "git"},
+		Packages:      []string{"golang", "curl", "ca-certificates", "git", "gh"},
 		NodeVersion:   "22",
 		Python:        false,
 		GoVersion:     "1.26.6",
