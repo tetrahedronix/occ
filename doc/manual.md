@@ -57,7 +57,7 @@ Place a custom `Dockerfile.tmpl` and/or `sandbox-occ.tmpl` in
 - `{{.OccVersion}}`, `{{.ConfigFile}}`, `{{.ConfigHash}}`
 - `{{.BaseImage}}`, `{{.PM}}` (`apt` or `apk`), `{{range .Packages}}`
 - `{{.Runtime}}` (`podman` or `docker`)
-- `{{.Userns}}`, `{{.Network}}` (Podman-only)
+- `{{.PodmanOptions.Userns}}`, `{{.PodmanOptions.Network}}` (emitted only when `runtime: podman`)
 - `{{range .Volumes}}`, `{{.Image}}`, `{{.DefaultCmd}}`
 
 Only generation-time values go through `text/template`; shell variables

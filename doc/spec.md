@@ -11,9 +11,9 @@ launcher. The launcher has no runtime dependency on `occ`.
 | `distro`            | string           | yes      | Base image, e.g. `debian:12`. Supported: `debian`, `ubuntu`, `alpine` (optionally with `:tag`). |
 | `packages`          | list of strings  | no       | System packages installed in the image.                                     |
 | `runtime`           | string           | yes      | `podman` or `docker`. Invalid values are rejected.                          |
-| `runtime_options`   | map              | no       | Engine-specific flags. Only meaningful for `podman`.                        |
-| `runtime_options.userns`  | string     | no       | Podman `--userns` value. Default `keep-id`.                                 |
-| `runtime_options.network` | string     | no       | Podman `--network` value. Default `slirp4netns`.                            |
+| `podman_options`    | map              | no       | Podman-only invocation flags. Absent/ignored when `runtime: docker`.        |
+| `podman_options.userns`   | string     | no       | Podman `--userns` value. Default `keep-id`.                                 |
+| `podman_options.network`  | string     | no       | Podman `--network` value. Default `slirp4netns`.                            |
 | `volumes`           | list of strings  | no       | `host:container` volume mounts added to the launcher.                       |
 | `image`             | string           | no       | Image name the launcher runs. Default `ia-orchestrator`.                        |
 | `script_name`       | string           | no       | Launcher filename. Default `orchestrator-occ.sh`.                                |

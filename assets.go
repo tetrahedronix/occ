@@ -19,17 +19,23 @@ type ScriptOptions struct {
 	NoCache bool `yaml:"no-cache"`
 }
 
+type PodmanOptions struct {
+	Userns  string `yaml:"userns,omitempty"`
+	Network string `yaml:"network,omitempty"`
+}
+
 type Config struct {
-	Distro        string        `yaml:"distro"`
-	DistroVersion string        `yaml:"distro_version"`
-	Runtime       string        `yaml:"runtime"`
-	ScriptName    string        `yaml:"script_name"`
-	Packages      []string      `yaml:"packages"`
-	NodeVersion   string        `yaml:"node_version"`
-	Python        bool          `yaml:"python"`
-	GoVersion     string        `yaml:"go_version"`
-	Opencode      bool          `yaml:"opencode"`
-	ScriptOptions ScriptOptions `yaml:"script_options"`
+	Distro        string         `yaml:"distro"`
+	DistroVersion string         `yaml:"distro_version"`
+	Runtime       string         `yaml:"runtime"`
+	ScriptName    string         `yaml:"script_name"`
+	Packages      []string       `yaml:"packages"`
+	NodeVersion   string         `yaml:"node_version"`
+	Python        bool           `yaml:"python"`
+	GoVersion     string         `yaml:"go_version"`
+	Opencode      bool           `yaml:"opencode"`
+	ScriptOptions ScriptOptions  `yaml:"script_options"`
+	PodmanOptions *PodmanOptions `yaml:"podman_options,omitempty"`
 }
 
 func newConfig(runtime string) (Config, error) {
@@ -50,6 +56,13 @@ func newConfig(runtime string) (Config, error) {
 			Reset:   false,
 			NoCache: false,
 		},
+	}
+
+	if runtime == "podman" {
+		defaultConfig.PodmanOptions = &PodmanOptions{
+			Userns:  "keep-id",
+			Network: "slirp4netns",
+		}
 	}
 
 	return defaultConfig, nil
