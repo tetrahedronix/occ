@@ -5,12 +5,12 @@ YAML file and renders a `Dockerfile` plus a standalone shell launcher.
 
 ## Commands
 
-### occ init
+### occ init [docker|podman]
 
 Scaffold a starter `orchestrator-occ.yml` in the current directory.
 
 ```
-occ init [--config <path>] [--force]
+occ init [docker|podman] [--config <path>] [--force]
 ```
 
 - `--config` writes to `<path>` instead of `orchestrator-occ.yml`.
@@ -40,10 +40,10 @@ Print the `occ` version.
 ## Workflow
 
 ```
-occ init          # scaffold orchestrator-occ.yml
-occ generate      # write Dockerfile + orchestrator-occ.sh
+occ init docker         # scaffold docker-occ.yml
+occ generate      # write Dockerfile + docker-occ.sh
 docker build -t occ-sandbox .    # or: podman build -t occ-sandbox .
-./orchestrator-occ.sh  # run the sandbox
+./docker-occ.sh  # run the sandbox
 ```
 
 The launcher forwards its first argument as the command to run inside the

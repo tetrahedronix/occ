@@ -1,8 +1,8 @@
 # occ: Reproducible Container Sandboxes for AI Coding Agents
 
-**occ** is a Go CLI that generates reproducible container sandboxes for AI coding agents based on a declarative `orchestrator.yml`. It produces a ready-to-use `Dockerfile` and a standalone shell launcher, with no runtime dependency on `occ` after generation.
+**occ** is a Go CLI that generates reproducible container sandboxes for AI coding agents based on a declarative YAML file. It produces a ready-to-use `Dockerfile` and a standalone shell launcher, with no runtime dependency on `occ` after generation.
 
-Each generated file carries a provenance header with the `occ` version and a SHA-256 hash of the source `orchestrator.yml`, making stale or hand-edited output easy to detect. The project includes embedded default templates, per-file template overrides, and strict validation that fails fast on unsupported distros or runtimes instead of emitting a broken Dockerfile.
+Each generated file carries a provenance header with the `occ` version and a SHA-256 hash of the source `orchestrator-occ.yml`, making stale or hand-edited output easy to detect. The project includes embedded default templates, per-file template overrides, and strict validation that fails fast on unsupported distros or runtimes instead of emitting a broken Dockerfile.
 
 The complete development roadmap is available at the following URL:
 
@@ -12,7 +12,7 @@ The complete development roadmap is available at the following URL:
 
 | Command     | Description                                     | Flags                                      |
 |-------------|-------------------------------------------------|--------------------------------------------|
-| `occ init`  | Scaffold a starter `orchestrator.yml`                | `--config`, `--force`                      |
+| `occ init`  | Scaffold a starter `orchestrator-occ.yml`                | `--config`, `--force`                      |
 | `occ generate` | Render the `Dockerfile` and shell launcher   | `--config`, `--output-dir`, `--template-dir`, `--force`, `--diff` |
 | `occ version` | Print the `occ` version                       |                                            |
 
@@ -34,16 +34,16 @@ The repository includes supporting documents covering the design philosophy, sch
 | Type   | Doc            | Description                          | URL                        |
 |--------|----------------|--------------------------------------|----------------------------|
 | Roadmap | TODO.org       | Development roadmap and architecture | [TODO.org](./TODO.org)     |
-| Spec   | spec.md        | `orchestrator.yml` schema and generated artifacts | [spec.md](./doc/spec.md) |
+| Spec   | spec.md        | `orchestrator-occ.yml` schema and generated artifacts | [spec.md](./doc/spec.md) |
 | Manual | manual.md      | Full user manual for `occ init` and `occ generate` | [manual.md](./doc/manual.md) |
 
 ## Workflow
 
 ```
-occ init          # scaffold orchestrator.yml
-occ generate      # write Dockerfile + orchestrator-occ.sh
+occ init docker   # scaffold docker-occ.yml
+occ generate      # write Dockerfile + docker-occ.sh
 docker build -t occ-sandbox .    # or: podman build -t occ-sandbox .
-./orchestrator-occ.sh  # run the sandbox
+./docker-occ.sh  # run the sandbox
 ```
 
 ## License
