@@ -1,31 +1,31 @@
 # occ - User Manual
 
 `occ` builds a reproducible container sandbox for AI coding agents from a
-`sandbox.yml` and renders a `Dockerfile` plus a standalone shell launcher.
+YAML file and renders a `Dockerfile` plus a standalone shell launcher.
 
 ## Commands
 
 ### occ init
 
-Scaffold a starter `sandbox.yml` in the current directory.
+Scaffold a starter `orchestrator-occ.yml` in the current directory.
 
 ```
 occ init [--config <path>] [--force]
 ```
 
-- `--config` writes to `<path>` instead of `sandbox.yml`.
+- `--config` writes to `<path>` instead of `orchestrator-occ.yml`.
 - `--force` overwrites an existing file; otherwise `init` refuses.
 
 ### occ generate
 
-Render the `Dockerfile` and the launcher from `sandbox.yml`.
+Render the `Dockerfile` and the launcher from `orchestrator-occ.yml`.
 
 ```
 occ generate [--config <path>] [--output-dir <dir>] [--template-dir <dir>]
              [--force] [--diff]
 ```
 
-- `--config` reads `<path>` instead of `sandbox.yml`.
+- `--config` reads `<path>` instead of `orchestrator-occ.yml`.
 - `--output-dir` writes artifacts to `<dir>` (created if missing) instead of
   the current directory.
 - `--template-dir` reads custom templates from `<dir>` (default
@@ -40,10 +40,10 @@ Print the `occ` version.
 ## Workflow
 
 ```
-occ init          # scaffold sandbox.yml
-occ generate      # write Dockerfile + sandbox-occ.sh
+occ init          # scaffold orchestrator-occ.yml
+occ generate      # write Dockerfile + orchestrator-occ.sh
 docker build -t occ-sandbox .    # or: podman build -t occ-sandbox .
-./sandbox-occ.sh  # run the sandbox
+./orchestrator-occ.sh  # run the sandbox
 ```
 
 The launcher forwards its first argument as the command to run inside the
@@ -51,7 +51,7 @@ container (default `opencode`).
 
 ## Template overrides
 
-Place a custom `Dockerfile.tmpl` and/or `sandbox-occ.tmpl` in
+Place a custom `Dockerfile.tmpl` and/or `orchestrator-occ.tmpl` in
 `.occ/templates/`. Template values available:
 
 - `{{.OccVersion}}`, `{{.ConfigFile}}`, `{{.ConfigHash}}`

@@ -23,7 +23,7 @@ The `generate` command refuses to overwrite an existing `Dockerfile` or launcher
 | Artifact        | Description                                     | URL                                  |
 |-----------------|-------------------------------------------------|--------------------------------------|
 | `Dockerfile`    | Base image, distro-specific package manager invocation, and provenance header | [spec.md](./doc/spec.md) |
-| `sandbox-occ.sh` | Launcher with volume mounts, SSH agent forwarding, and runtime-specific flags | [spec.md](./doc/spec.md) |
+| `orchestrator-occ.sh` | Launcher with volume mounts, SSH agent forwarding, and runtime-specific flags | [spec.md](./doc/spec.md) |
 
 Podman-only flags (`--userns`, `--network`) are emitted only when `runtime: podman`, and shell-evaluated variables (`$SSH_AUTH_SOCK`, `$(pwd)`, `$HOME`) survive generation untouched.
 
@@ -41,9 +41,9 @@ The repository includes supporting documents covering the design philosophy, sch
 
 ```
 occ init          # scaffold orchestrator.yml
-occ generate      # write Dockerfile + sandbox-occ.sh
+occ generate      # write Dockerfile + orchestrator-occ.sh
 docker build -t occ-sandbox .    # or: podman build -t occ-sandbox .
-./sandbox-occ.sh  # run the sandbox
+./orchestrator-occ.sh  # run the sandbox
 ```
 
 ## License
