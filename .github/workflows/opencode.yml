@@ -1,5 +1,4 @@
 name: opencode
-
 on:
   issue_comment:
     types: [created]
@@ -24,24 +23,18 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          persist-credentials: false
+          persist-credentials: true
 
-      # IMPOSTAZIONE OBBLIGATORIA: Git ha bisogno di un'identità per fare commit
-      - name: Configure git user
+      - name: Configure Repository Git Credentials
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Run OpenCode
         uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.ZEN_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Le seguenti variabili non sono più necessarie, ma puoi tenerle
-          GIT_AUTHOR_NAME: "github-actions[bot]"
-          GIT_AUTHOR_EMAIL: "github-actions[bot]@users.noreply.github.com"
-          GIT_COMMITTER_NAME: "github-actions[bot]"
-          GIT_COMMITTER_EMAIL: "github-actions[bot]@users.noreply.github.com"
         with:
           model: opencode/nemotron-3.5-lightning-free
           use_github_token: "true"
