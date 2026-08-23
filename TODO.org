@@ -22,7 +22,12 @@
     - DONE Distro / Base image specifications
     - DONE System packages list
     - DONE Runtime options & flags
-    - Container runtime field (=podman= / =docker=), with engine-specific sub-options (e.g. =userns=keep-id=, =network=slirp4netns= only meaningful for Podman)
+    - DONE Container runtime field (=runtime=: enum =podman=/=docker=)
+    - DONE Separate =podman_options= struct (=Userns=, =Network=) as its own
+      top-level =Config= field (=*PodmanOptions=, pointer, =omitempty=),
+      populated only when =runtime: podman=; =nil= (and thus absent from
+      the rendered YAML) when =runtime: docker=. Defaults: =Userns= =
+      "keep-id", =Network= = "slirp4netns" (see doc/spec.md).
     - Output script name (user-chosen launcher filename)
 *** TODO Define distro → package-manager mapping table
     - Explicit list of supported distros (e.g. Debian/Ubuntu only, or + Alpine)
