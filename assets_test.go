@@ -9,37 +9,52 @@ import (
 )
 
 func TestNewConfig(t *testing.T) {
-	base := Config{
-		Distro:        "debian",
-		DistroVersion: "13.6",
-		Packages:      []string{"golang", "curl", "ca-certificates", "git", "gh"},
-		NodeVersion:   "22",
-		Python:        false,
-		GoVersion:     "1.26.6",
-		Opencode:      true,
-	}
-
 	cases := []struct {
 		runtime string
+		get     func() (Config, error)
 		want    Config
 	}{
-		{"docker", Config{Runtime: "docker", ScriptName: "docker-occ.sh"}},
-		{"podman", Config{Runtime: "podman", ScriptName: "podman-occ.sh"}},
+		{"docker", func() (Config, error) { return newConfig("docker") }, Config{
+			Distro:        "debian",
+			DistroVersion: "13.6",
+			Runtime:       "docker",
+			ScriptName:    "docker-occ.sh",
+			Packages:      []string{"golang", "curl", "ca-certificates", "git", "gh"},
+			NodeVersion:   "22",
+			Python:        false,
+			GoVersion:     "1.26.6",
+			Opencode:      true,
+			PM:            "apt",
+			BaseImage:     "debian",
+			PodmanOptions: nil,
+		}},
+		{"podman", func() (Config, error) { return newConfig("podman") }, Config{
+			Distro:        "debian",
+			DistroVersion: "13.6",
+			Runtime:       "podman",
+			ScriptName:    "podman-occ.sh",
+			Packages:      []string{"golang", "curl", "ca-certificates", "git", "gh"},
+			NodeVersion:   "22",
+			Python:        false,
+			GoVersion:     "1.26.6",
+			Opencode:      true,
+			PM:            "apt",
+			BaseImage:     "debian",
+			PodmanOptions: &PodmanOptions{
+				Userns:  "keep-id",
+				Network: "slirp4netns",
+			},
+		}},
 	}
 
 	for _, tc := range cases {
-		got, err := newConfig(tc.runtime)
+		got, err := tc.get()
 		if err != nil {
 			t.Fatalf("newConfig(%q): unexpected error: %v", tc.runtime, err)
 		}
 
-		// Initialize want from base, overriding only Runtime and ScriptName
-		want := base
-		want.Runtime = tc.want.Runtime
-		want.ScriptName = tc.want.ScriptName
-
-		if !reflect.DeepEqual(got, want) {
-			t.Errorf("newConfig(%q) = %+v, want %+v", tc.runtime, got, want)
+		if !reflect.DeepEqual(got, tc.want) {
+			t.Errorf("newConfig(%q) = %+v, want %+v", tc.runtime, got, tc.want)
 		}
 	}
 }

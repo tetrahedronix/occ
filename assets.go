@@ -36,6 +36,8 @@ type Config struct {
 	Opencode      bool           `yaml:"opencode"`
 	ScriptOptions ScriptOptions  `yaml:"script_options"`
 	PodmanOptions *PodmanOptions `yaml:"podman_options,omitempty"`
+	PM            string         `yaml:"-"`
+	BaseImage     string         `yaml:"-"`
 }
 
 func newConfig(runtime string) (Config, error) {
@@ -56,7 +58,15 @@ func newConfig(runtime string) (Config, error) {
 			Reset:   false,
 			NoCache: false,
 		},
+		PM: "apt",
 	}
+
+	distroInfo, err := GetDistroInfo(defaultConfig.Distro)
+	if err != nil {
+		return Config{}, fmt.Errorf("unsupported distro %s: %w", defaultConfig.Distro, err)
+	}
+	defaultConfig.PM = distroInfo.PackageManager
+	defaultConfig.BaseImage = distroInfo.BaseImage
 
 	if runtime == "podman" {
 		defaultConfig.PodmanOptions = &PodmanOptions{

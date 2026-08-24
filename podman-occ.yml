@@ -1,0 +1,22 @@
+distro: debian
+distro_version: "13.6"
+runtime: podman
+script_name: podman-occ.sh
+packages:
+    - golang
+    - curl
+    - ca-certificates
+    - git
+    - gh
+node_version: "22"
+python: false
+go_version: 1.26.6
+opencode: true
+script_options:
+    ssh: false
+    github: false
+    reset: false
+    no-cache: false
+podman_options:
+    userns: keep-id
+    network: slirp4netns
