@@ -24,7 +24,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          # persist-credentials è true di default, quindi non serve specificarlo
 
       - name: Configure git identity
         run: |
@@ -35,8 +34,7 @@ jobs:
         uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.ZEN_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  
         with:
           model: opencode/nemotron-3.5-lightning-free
           use_github_token: "true"
-          # github_token: ${{ secrets.GITHUB_TOKEN }}  # RIMOSSO per evitare warning
