@@ -44,6 +44,7 @@
 *** TODO Draft default =orchestrator-occ.tmpl= (shell launcher wrapper)
     - Handle enabled flags dynamically
     - Set up volume mounts and container run options
+    - Isolate the OpenCode home mount per project (e.g. derive the host path from the project/script name, such as =$HOME/.opencode-home-<project>=) instead of a single shared =$HOME/.opencode-home=, to avoid OpenCode history/state leaking across unrelated sandboxes launched from the same template
     - Branch runtime-specific flags on the =runtime= field (Podman vs Docker options are not interchangeable)
     - Keep runtime-evaluated shell variables (=$SSH_AUTH_SOCK=, =$(pwd)=, =$HOME=) untouched by template substitution — only generation-time values go through =text/template=
     - Provenance header comment (version + config hash)
