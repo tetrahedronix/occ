@@ -70,15 +70,19 @@ func newConfig(runtime Runtime) (Config, error) {
 
 // Phase 3: "Implement YAML parser module"
 
-func (c Config) Valide() error {
+func (c Config) Validate() error {
 
 	if _, err := c.Distro.PackageManager(); err != nil {
 		return err
 	}
 
-	if c.Runtime != "podman" && c.Runtime != "docker" {
-		return fmt.Errorf("unsupported runtime: %q", c.Runtime)
+	if err := c.Runtime.Validate(); err != nil {
+		return err
 	}
+
+	// if c.Runtime != RuntimePodman && c.Runtime != RuntimeDocker {
+	// 	return fmt.Errorf("unsupported runtime: %q", c.Runtime)
+	// }
 
 	return nil
 }

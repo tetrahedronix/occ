@@ -41,3 +41,16 @@ const (
 	RuntimePodman Runtime = "podman"
 	RuntimeDocker Runtime = "docker"
 )
+
+var validRuntimes = map[Runtime]bool{
+	RuntimeDocker: true,
+	RuntimePodman: true,
+}
+
+func (r Runtime) Validate() error {
+	if !validRuntimes[r] {
+		return fmt.Errorf("unsupported runtime: %q", r)
+	}
+
+	return nil
+}
