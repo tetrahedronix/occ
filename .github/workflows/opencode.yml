@@ -8,9 +8,12 @@ on:
 
 jobs:
   opencode:
+    # Attiva solo se il commento contiene /oc o /opencode
+    # E se l'autore del commento è un collaboratore del repository
     if: |
-      contains(github.event.comment.body, '/oc') ||
-      contains(github.event.comment.body, '/opencode')
+      (contains(github.event.comment.body, '/oc') || 
+       contains(github.event.comment.body, '/opencode')) &&
+      github.event.comment.author_association == 'COLLABORATOR'
     runs-on: ubuntu-latest
 
     permissions:
@@ -24,6 +27,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          # persist-credentials è true di default, mantiene il token
 
       - name: Configure git identity
         run: |
@@ -34,7 +38,7 @@ jobs:
         uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.ZEN_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
           model: opencode/nemotron-3.5-lightning-free
           use_github_token: "true"
