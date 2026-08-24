@@ -13,7 +13,7 @@ const (
 type PackageManager string
 
 const (
-	PMApt PackageManager = "apt-get"
+	PMApt PackageManager = "apt"
 	PMApk PackageManager = "apk"
 )
 

@@ -31,7 +31,9 @@
     - Output script name (user-chosen launcher filename)
 *** TODO Define distro → package-manager mapping table
     - DONE Explicit list of supported distros (e.g. Debian/Ubuntu only, or + Alpine)
-    - Package-manager install syntax per distro, used by conditional blocks in =Dockerfile.tmpl=
+    - DONE Package-manager install syntax per distro, used by conditional blocks in Dockerfile.tmpl
+    - DONE PMApt="apt", PMApk="apk"; conditional syntax already in Dockerfile.tmpl
+    - Note: .PM not yet populated by the generator — integration planned for Phase 3
     - Decide and document scope: unsupported distro should fail validation, not silently emit a broken Dockerfile
 *** DONE Add dependency =gopkg.in/yaml.v3=
 
