@@ -34,7 +34,13 @@
     - DONE Package-manager install syntax per distro, used by conditional blocks in Dockerfile.tmpl
     - DONE PMApt="apt", PMApk="apk"; conditional syntax already in Dockerfile.tmpl
     - Note: .PM not yet populated by the generator — integration planned for Phase 3
-    - Decide and document scope: unsupported distro should fail validation, not silently emit a broken Dockerfile
+    - TODO Decide and document scope: unsupported distro should fail validation, not silently emit a broken Dockerfile
+        - DONE: scope decided (debian/ubuntu/alpine) via distroPackageManager map
+        - DONE: documented in doc/spec.md
+        - TODO: Config.Validate() must be called BEFORE template.Execute()
+      in the Dockerfile generator (Phase 3) — otherwise .PM="" falls into the
+      "else" branch of the template and produces an apt-based Dockerfile even for unsupported distros, instead of failing with a clear error
+
 *** DONE Add dependency =gopkg.in/yaml.v3=
 
 ** TODO Phase 2: Template Design & Embedding                       :template:
