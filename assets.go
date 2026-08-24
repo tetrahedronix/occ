@@ -25,9 +25,9 @@ type PodmanOptions struct {
 }
 
 type Config struct {
-	Distro        string         `yaml:"distro"`
+	Distro        Distro         `yaml:"distro"`
 	DistroVersion string         `yaml:"distro_version"`
-	Runtime       string         `yaml:"runtime"`
+	Runtime       Runtime        `yaml:"runtime"`
 	ScriptName    string         `yaml:"script_name"`
 	Packages      []string       `yaml:"packages"`
 	NodeVersion   string         `yaml:"node_version"`
@@ -38,13 +38,13 @@ type Config struct {
 	PodmanOptions *PodmanOptions `yaml:"podman_options,omitempty"`
 }
 
-func newConfig(runtime string) (Config, error) {
+func newConfig(runtime Runtime) (Config, error) {
 
 	defaultConfig := Config{
 		Distro:        "debian",
 		DistroVersion: "13.6",
 		Runtime:       runtime,
-		ScriptName:    runtime + "-occ.sh",
+		ScriptName:    string(runtime) + "-occ.sh",
 		Packages:      []string{"golang", "curl", "ca-certificates", "git", "gh"},
 		NodeVersion:   "22",
 		Python:        false,
@@ -58,7 +58,7 @@ func newConfig(runtime string) (Config, error) {
 		},
 	}
 
-	if runtime == "podman" {
+	if runtime == RuntimePodman {
 		defaultConfig.PodmanOptions = &PodmanOptions{
 			Userns:  "keep-id",
 			Network: "slirp4netns",
@@ -66,6 +66,21 @@ func newConfig(runtime string) (Config, error) {
 	}
 
 	return defaultConfig, nil
+}
+
+// Phase 3: "Implement YAML parser module"
+
+func (c Config) Valide() error {
+
+	if _, err := c.Distro.PackageManager(); err != nil {
+		return err
+	}
+
+	if c.Runtime != "podman" && c.Runtime != "docker" {
+		return fmt.Errorf("unsupported runtime: %q", c.Runtime)
+	}
+
+	return nil
 }
 
 func newConfigFile(cfg Config, force bool) error {
@@ -76,7 +91,7 @@ func newConfigFile(cfg Config, force bool) error {
 		return fmt.Errorf("error during YAML serialization: %w", err)
 	}
 
-	filename := cfg.Runtime + "-occ.yml"
+	filename := string(cfg.Runtime + "-occ.yml")
 
 	// Scrivi direttamente
 	if force {

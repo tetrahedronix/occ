@@ -51,7 +51,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	}
 
 	// Invoca NewConfig per popolare la struttura
-	cfg, err := newConfig(runtime)
+	cfg, err := newConfig(Runtime(runtime))
 
 	if err != nil {
 		return fmt.Errorf("impossibile generare la configurazione di base: %w", err)

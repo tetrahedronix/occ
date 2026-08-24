@@ -30,7 +30,7 @@
       "keep-id", =Network= = "slirp4netns" (see doc/spec.md).
     - Output script name (user-chosen launcher filename)
 *** TODO Define distro → package-manager mapping table
-    - Explicit list of supported distros (e.g. Debian/Ubuntu only, or + Alpine)
+    - DONE Explicit list of supported distros (e.g. Debian/Ubuntu only, or + Alpine)
     - Package-manager install syntax per distro, used by conditional blocks in =Dockerfile.tmpl=
     - Decide and document scope: unsupported distro should fail validation, not silently emit a broken Dockerfile
 *** DONE Add dependency =gopkg.in/yaml.v3=
