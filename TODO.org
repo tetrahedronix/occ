@@ -37,9 +37,7 @@
     - TODO Decide and document scope: unsupported distro should fail validation, not silently emit a broken Dockerfile
         - DONE: scope decided (debian/ubuntu/alpine) via distroPackageManager map
         - DONE: documented in doc/spec.md
-        - TODO: Config.Validate() must be called BEFORE template.Execute()
-      in the Dockerfile generator (Phase 3) — otherwise .PM="" falls into the
-      "else" branch of the template and produces an apt-based Dockerfile even for unsupported distros, instead of failing with a clear error
+        - TODO: Config.Validate() must be called BEFORE template.Execute()      in the Dockerfile generator (Phase 3) — otherwise .PM="" falls into the "else" branch of the template and produces an apt-based Dockerfile even for unsupported distros, instead of failing with a clear error
 
 *** DONE Add dependency =gopkg.in/yaml.v3=
 
