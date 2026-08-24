@@ -37,21 +37,21 @@ func main() {
 }
 
 func runInit(cmd *cobra.Command, args []string) error {
-	var runtime string
+	var runtime Runtime
 	// args[0] dovrebbe contenere "docker" oppure "podman"
 	target := args[0]
 
 	switch target {
 	case "docker":
-		runtime = "docker"
+		runtime = RuntimeDocker
 	case "podman":
-		runtime = "podman"
+		runtime = RuntimePodman
 	default:
 		return fmt.Errorf("runtime not supported: %s. Use 'docker' or 'podman'.", target)
 	}
 
 	// Invoca NewConfig per popolare la struttura
-	cfg, err := newConfig(Runtime(runtime))
+	cfg, err := newConfig(runtime)
 
 	if err != nil {
 		return fmt.Errorf("impossibile generare la configurazione di base: %w", err)
